@@ -1,4 +1,4 @@
-package com.revature.main;
+package com.revature.services;
 
 import com.revature.beans.User;
 
