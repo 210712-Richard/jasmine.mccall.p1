@@ -15,10 +15,11 @@ public class UserServiceImpl implements UserService {
 	private Logger log = LogManager.getLogger(UserServiceImpl.class);
 
 	
-	public User login(String name, String password) {
-		User u = ud.getUser(name , password);
+	public User login(String username, String password) {
+		User u = ud.getUser(username , password);
+		log.debug(u);
 		return u;
+		
+		}
 	
-
-}
 }

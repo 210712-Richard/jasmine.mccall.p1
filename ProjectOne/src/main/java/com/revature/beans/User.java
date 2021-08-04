@@ -7,7 +7,6 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String email;
-	private Long userID;
 	private String username;
 	private String password;
 	private UserType type;
@@ -18,16 +17,13 @@ public class User {
 		//this.lastCheckIn = LocalDate.of(2021,1,1)
 		
 	}
-	public User(String firstName, String lastName, String email, Long userID, String username, String password,
-			UserType type) {
+	public User(String firstName, String lastName, String email, String username, String password) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.userID = userID;
 		this.username = username;
 		this.password = password;
-		this.type = type;
 	}
 	public String getFirstName() {
 		return firstName;
@@ -47,12 +43,7 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Long getUserID() {
-		return userID;
-	}
-	public void setUserID(Long userID) {
-		this.userID = userID;
-	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -80,7 +71,6 @@ public class User {
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		result = prime * result + ((userID == null) ? 0 : userID.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -115,11 +105,6 @@ public class User {
 			return false;
 		if (type != other.type)
 			return false;
-		if (userID == null) {
-			if (other.userID != null)
-				return false;
-		} else if (!userID.equals(other.userID))
-			return false;
 		if (username == null) {
 			if (other.username != null)
 				return false;
@@ -129,7 +114,7 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", userID=" + userID
+		return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", username=" + username + ", password=" + password + ", type=" + type + "]";
 	}
 	
