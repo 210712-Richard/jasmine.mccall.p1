@@ -1,29 +1,32 @@
 package com.revature.beans;
 
-//import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-public class User {
-	
+
+public class User  {
+	private String username;
 	private String firstName;
 	private String lastName;
-	private String email;
-	private String username;
 	private String password;
+	private String email;
 	private UserType type;
+	private List<UUID> documents = new ArrayList<UUID>();
 	
 	public User() {
 		super();
-		this.type = UserType.Employee;
-		//this.lastCheckIn = LocalDate.of(2021,1,1)
 		
 	}
-	public User(String firstName, String lastName, String email, String username, String password) {
+	public User(String username, String firstName, String lastName, String password, String email) {
 		super();
+		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.email = email;
-		this.username = username;
 		this.password = password;
+		this.email = email;
+		
+		
 	}
 	public String getFirstName() {
 		return firstName;
@@ -62,10 +65,18 @@ public class User {
 	public void setType(UserType type) {
 		this.type = type;
 	}
+	
+	public List<UUID> getDocuments() {
+		return documents;
+	}
+	public void setDocuments(List<UUID> documents) {
+		this.documents = documents;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((documents == null) ? 0 : documents.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
@@ -83,6 +94,11 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
+		if (documents == null) {
+			if (other.documents != null)
+				return false;
+		} else if (!documents.equals(other.documents))
+			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;
@@ -114,10 +130,9 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", username=" + username + ", password=" + password + ", type=" + type + "]";
+		return "User [username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", password="
+				+ password + ", email=" + email + ", type=" + type + ", documents=" + documents + "]";
 	}
-	
+}
 	
 
-}
