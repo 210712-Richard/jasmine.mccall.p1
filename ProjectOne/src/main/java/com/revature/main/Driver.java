@@ -17,8 +17,8 @@ import io.javalin.plugin.json.JavalinJackson;
 
 public class Driver {
 	public static void main(String[] args) {
-		instantiateDatabase();
-		//javalin();
+		//instantiateDatabase();
+		javalin();
 		
 //		NotificationFactory notificationFactory = new NotificationFactory();
 //		Notification notification = notificationFactory.createNotification("EMAIL");
@@ -26,31 +26,31 @@ public class Driver {
 //	}
 	}
 	public static void instantiateDatabase() {
-//		DataBaseCreator.dropTables();
-//		try {
-//			Thread.sleep(30000); // wait 20 seconds
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//		DataBaseCreator.createTables();
-//		try {
-//			Thread.sleep(10000); // wait 10 seconds
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
+		DataBaseCreator.dropTables();
+		try {
+			Thread.sleep(40000); // wait 20 seconds
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		DataBaseCreator.createTables();
+		try {
+			Thread.sleep(30000); // wait 10 seconds
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		DataBaseCreator.populateUserTable();
+		DataBaseCreator.populateFormTable();
+		DataBaseCreator.populateEmailTable();
 		System.exit(0);
 	}
 
 	public static void javalin() {
 		
-		// Set up Jackson to serialize LocalDates and LocalDateTimes
 		ObjectMapper jackson = new ObjectMapper();
 		jackson.registerModule(new JavaTimeModule());
 		jackson.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		JavalinJackson.configure(jackson);
 		
-		// Starts the Javalin Framework
 		Javalin app = Javalin.create().start(8080);
 		
 		UserController uc = (UserController) BeanFactory.getFactory().get(UserController.class, UserControllerImpl.class);
@@ -59,6 +59,9 @@ public class Driver {
 		app.post("/users", uc::login);
 		app.delete("/users", uc::logout);
 		app.post("/form/:username", rc::addForm);
+		app.get("/request/:username", uc::viewRequestById);
+		app.get("/users/:email", uc::viewEmail);
+		app.put("/requests/:username", uc::approve);
 		
 		}
 	

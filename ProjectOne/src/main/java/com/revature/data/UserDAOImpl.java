@@ -3,6 +3,8 @@ package com.revature.data;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.UUID;
+
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
@@ -24,7 +26,8 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public void addUser(User u) {
 		String query = "Insert into user (username, firstName, lastName, password, email, type) values (?, ?, ?, ?, ?, ?);";
-		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
+		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
+				.build();
 		BoundStatement bound = session.prepare(s)
 				.bind(u.getUsername(), u.getFirstName(), u.getLastName(), u.getPassword(), u.getEmail(), u.getType().toString());
 		session.execute(bound);
@@ -88,10 +91,22 @@ public class UserDAOImpl implements UserDAO{
 	}
 
 
-	public void addForm(Form f) {
-		
-		
+	@Override
+	public List<UUID> getUserForms(String username) {
+		String query = "Select forms from user where username=?";
+		SimpleStatement s = new SimpleStatementBuilder(query).build();
+		BoundStatement bound = session.prepare(s).bind(username);
+		// ResultSet is the values returned by my query.
+		ResultSet rs = session.execute(bound);
+		Row row = rs.one();
+		if(row == null) {
+			// if there is no return values
+			return null;
+		}
+		List<UUID> forms = row.getList("forms", UUID.class);
+		return forms;
 	}
+
 
 
 

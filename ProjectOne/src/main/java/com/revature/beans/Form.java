@@ -16,7 +16,8 @@ public class Form {
 	private GradeFormat format;
 	private Double gradeReceived;
 	private ReimbursementType type;
-	private List<Document> documents;
+	//private List<Document> documents;
+	private ApplicationStatus status;
 	
 	
 //	public Form(String username, String firstName, String lastName, String email, Long reimbursementAmount,
@@ -49,6 +50,9 @@ public class Form {
 	}
 	public Form() {
 		super();
+		this.id = UUID.randomUUID();
+		//this.status= ApplicationStatus.PENDING;
+		this.date = LocalDate.now();
 	}
 	public UUID getId() {
 		return id;
@@ -132,20 +136,27 @@ public class Form {
 		this.format = format;
 	}
 	
-	public List<Document> getDocuments() {
-		return documents;
-	}
+//	public List<Document> getDocuments() {
+//		return documents;
+//	}
+//
+//	public void setDocuments(List<Document> documents) {
+//		this.documents = documents;
+//	}
+	
 
-	public void setDocuments(List<Document> documents) {
-		this.documents = documents;
+	public ApplicationStatus getStatus() {
+		return status;
 	}
-
+	public void setStatus(ApplicationStatus status) {
+		this.status = status;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
-		result = prime * result + ((documents == null) ? 0 : documents.hashCode());
+//		result = prime * result + ((documents == null) ? 0 : documents.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((format == null) ? 0 : format.hashCode());
@@ -153,6 +164,7 @@ public class Form {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((reimbursementAmount == null) ? 0 : reimbursementAmount.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -172,11 +184,11 @@ public class Form {
 				return false;
 		} else if (!date.equals(other.date))
 			return false;
-		if (documents == null) {
-			if (other.documents != null)
-				return false;
-		} else if (!documents.equals(other.documents))
-			return false;
+//		if (documents == null) {
+//			if (other.documents != null)
+//				return false;
+//		} else if (!documents.equals(other.documents))
+//			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;
@@ -209,6 +221,8 @@ public class Form {
 				return false;
 		} else if (!reimbursementAmount.equals(other.reimbursementAmount))
 			return false;
+		if (status != other.status)
+			return false;
 		if (type != other.type)
 			return false;
 		if (username == null) {
@@ -223,7 +237,8 @@ public class Form {
 	public String toString() {
 		return "Form [id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", email=" + email + ", reimbursementAmount=" + reimbursementAmount + ", date=" + date + ", format="
-				+ format + ", gradeReceived=" + gradeReceived + ", type=" + type + ", documents=" + documents + "]";
+				+ format + ", gradeReceived=" + gradeReceived + ", type=" + type 
+				+ ", status=" + status + "]";
 	}
 
 	

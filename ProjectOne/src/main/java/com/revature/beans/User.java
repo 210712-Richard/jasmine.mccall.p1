@@ -12,7 +12,7 @@ public class User  {
 	private String password;
 	private String email;
 	private UserType type;
-	private List<UUID> documents = new ArrayList<UUID>();
+	private List<UUID> forms = new ArrayList<UUID>();
 	
 	public User() {
 		super();
@@ -66,17 +66,17 @@ public class User  {
 		this.type = type;
 	}
 	
-	public List<UUID> getDocuments() {
-		return documents;
+	public List<UUID> getForms() {
+		return forms;
 	}
-	public void setDocuments(List<UUID> documents) {
-		this.documents = documents;
+	public void setDocuments(List<UUID>forms) {
+		this.forms = forms;
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((documents == null) ? 0 : documents.hashCode());
+		result = prime * result + ((forms == null) ? 0 : forms.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
@@ -94,10 +94,10 @@ public class User  {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (documents == null) {
-			if (other.documents != null)
+		if (forms == null) {
+			if (other.forms != null)
 				return false;
-		} else if (!documents.equals(other.documents))
+		} else if (!forms.equals(other.forms))
 			return false;
 		if (email == null) {
 			if (other.email != null)
@@ -131,7 +131,7 @@ public class User  {
 	@Override
 	public String toString() {
 		return "User [username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", password="
-				+ password + ", email=" + email + ", type=" + type + ", documents=" + documents + "]";
+				+ password + ", email=" + email + ", type=" + type + ", documents=" + forms + "]";
 	}
 }
 	
