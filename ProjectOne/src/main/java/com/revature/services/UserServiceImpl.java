@@ -34,26 +34,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
      public User approveRequest(User user, UUID id) {
-    	 User u = new User();
-    	 Form f = rd.getFormByUsername(u.getUsername());
-    	 if (u.getUsername() == ((UserType.DirectSup).toString())) {
-    		 rd.getForm();
-    		
-    		 f.setStatus(ApplicationStatus.APPROVED);
-    		 //rd.updateForm(f);
-    		 System.out.print(f);
-    		 if (u.getUsername().equals((UserType.DeptHead).toString())) {
-        		 f.setStatus(ApplicationStatus.APPROVED);
-        		 if (u.getUsername().equals((UserType.BenCo).toString())) {
-            		 f.setStatus(ApplicationStatus.APPROVED);
-            	 }
-        		 else {
-        			 f.setStatus(ApplicationStatus.PENDING);
-        		 }
-        	 }
-    	 }
-		return u;
-    	 
+
     	 
      }
 
