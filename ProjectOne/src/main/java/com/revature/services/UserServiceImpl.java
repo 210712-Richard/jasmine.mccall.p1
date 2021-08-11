@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
      public User approveRequest(User user, UUID id) {
-
+	}
     	 
      }
 
