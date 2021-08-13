@@ -3,14 +3,12 @@ package com.revature.main;
 import java.time.LocalDate;
 
 import com.revature.beans.ApplicationStatus;
-import com.revature.beans.EmailNotification;
 import com.revature.beans.Form;
 import com.revature.beans.GradeFormat;
+import com.revature.beans.ReasonForDenial;
 import com.revature.beans.ReimbursementType;
 import com.revature.beans.User;
 import com.revature.beans.UserType;
-import com.revature.data.NotificationDAO;
-import com.revature.data.NotificationDAOImpl;
 import com.revature.data.ReimbursementDAO;
 import com.revature.data.ReimbursementDAOImpl;
 import com.revature.data.UserDAO;
@@ -20,7 +18,7 @@ import com.revature.util.CassandraUtil;
 public class DataBaseCreator {
 	private static UserDAO ud = new UserDAOImpl();
 	private static ReimbursementDAO rd = new ReimbursementDAOImpl();
-	private static NotificationDAO nd = new NotificationDAOImpl();
+
 	
 	public static void dropTables() {
 		StringBuilder sb = new StringBuilder("DROP TABLE IF EXISTS user;");
@@ -36,13 +34,13 @@ public class DataBaseCreator {
 	public static void createTables() {
 		StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS USER (")
 				.append("username text PRIMARY KEY, firstName text, lastName text,")
-				.append("password text, email text, type text, forms list<uuid>);");
+				.append("password text, email text, type text, forms list<uuid>, funds bigint, notifications list<uuid> );");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 		
 		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS FORM (")
 				.append("username text PRIMARY KEY, id uuid ,firstName text, lastName text, ")
 				.append("email text, reimbursementAmount bigint, date date, format text,")
-		        .append("gradeReceived double, type text, status text);");
+		        .append("gradeReceived text, type text, status text, directSupApproval boolean, deptHeadApproval boolean, benCoApproval boolean, reasonForDenial text, time time, document text  );");
 	    CassandraUtil.getInstance().getSession().execute(sb.toString());
 	    
 	    sb = new StringBuilder("CREATE TABLE IF NOT EXISTS EMAIL (")
@@ -54,6 +52,7 @@ public class DataBaseCreator {
 	public static void populateUserTable() {
 		User u = new User("jmccall", "Jasmine", "McCall", "1234", "jasmine@jasmine.net");
 		u.setType(UserType.BenCo);
+		
 		ud.addUser(u);
 		User h = new User("tim", "Timothy", "T", "5678", "tim@tim.net");
 		h.setType(UserType.DeptHead);
@@ -70,18 +69,18 @@ public class DataBaseCreator {
 	}
 
 	public static void populateFormTable() {
-		Form f = new Form("employee1", "Jane", "J", "jane@employee.net", 400l, LocalDate.of(2021, 1, 1), 99d);
+		Form f = new Form("employee1", "Jane", "J", "jane@employee.net", 400l, LocalDate.of(2021, 1, 1), "99");
 		f.setType(ReimbursementType.TechTraining);
 	    f.setFormat(GradeFormat.Percentage);
 	    f.setStatus(ApplicationStatus.PENDING);
-		//f.setDocuments(null);
+		f.setDirectSupApproval(false);
+		f.setDeptHeadApproval(false);
+		f.setBenCoApproval(false);
+		f.setReasonForDenial(ReasonForDenial.N_A);
+		
 		rd.addForm(f);
 	}
 	
-	public static void populateEmailTable() {
-		EmailNotification email = new EmailNotification("jane@employee.net", "You've been approved!");
-		nd.addEmail(email);
-	
-	}
+
 		
 }

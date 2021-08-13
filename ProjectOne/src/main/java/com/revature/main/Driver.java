@@ -1,6 +1,12 @@
 package com.revature.main;
 
 
+
+
+
+
+
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -9,41 +15,35 @@ import com.revature.controllers.ReimbursementControllerImpl;
 import com.revature.controllers.UserController;
 import com.revature.controllers.UserControllerImpl;
 import com.revature.factory.BeanFactory;
-//import com.revature.factory.Notification;
-//import com.revature.factory.NotificationFactory;
-
 import io.javalin.Javalin;
 import io.javalin.plugin.json.JavalinJackson;
-
 public class Driver {
 	public static void main(String[] args) {
 		//instantiateDatabase();
-		javalin();
+		//javalin();
 		
-//		NotificationFactory notificationFactory = new NotificationFactory();
-//		Notification notification = notificationFactory.createNotification("EMAIL");
-//		notification.notifyUser();
-//	}
 	}
+
 	public static void instantiateDatabase() {
 		DataBaseCreator.dropTables();
 		try {
-			Thread.sleep(40000); // wait 20 seconds
+			Thread.sleep(40000);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		DataBaseCreator.createTables();
 		try {
-			Thread.sleep(30000); // wait 10 seconds
+			Thread.sleep(30000);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		DataBaseCreator.populateUserTable();
 		DataBaseCreator.populateFormTable();
-		DataBaseCreator.populateEmailTable();
+
 		System.exit(0);
 	}
 
+	
 	public static void javalin() {
 		
 		ObjectMapper jackson = new ObjectMapper();
@@ -60,10 +60,19 @@ public class Driver {
 		app.delete("/users", uc::logout);
 		app.post("/form/:username", rc::addForm);
 		app.get("/request/:username", uc::viewRequestById);
-		app.get("/users/:email", uc::viewEmail);
-		app.put("/requests/:username", uc::approve);
+		app.put("/requests/:username/supervisor/", uc::supApproval);
+		app.put("/requests/:username/departmentHead", uc::deptHeadApproval);
+		app.put("/requests/:username/benCo", uc::benCoApproval);
+		app.put("/requests/:username/supervisor/denial", uc::supDenial);
+		app.put("/requests/:username/departmentHead/denial", uc::deptHeadDenial);
+		app.put("/requests/:username/benCo/denial", uc::benCoDenial);
+		app.put("/uploads/:username/documents", rc::uploadDocument);
+		app.get("/documents/:username/", rc::getUpload);
+		app.put("/requests/:username/benCo/moreInfo", uc::moreInfoBenco);
 		
-		}
+		
+		
+	}
 	
 
 }

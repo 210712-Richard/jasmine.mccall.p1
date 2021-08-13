@@ -11,10 +11,10 @@ import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.cql.SimpleStatementBuilder;
-import com.datastax.oss.driver.api.core.data.TupleValue;
 import com.revature.beans.ApplicationStatus;
 import com.revature.beans.Form;
 import com.revature.beans.GradeFormat;
+import com.revature.beans.ReasonForDenial;
 import com.revature.beans.ReimbursementType;
 import com.revature.factory.Log;
 import com.revature.util.CassandraUtil;
@@ -24,31 +24,22 @@ public class ReimbursementDAOImpl implements ReimbursementDAO{
 	private CqlSession session = CassandraUtil.getInstance().getSession();
 	
 
+
 	@Override
-	public UUID addForm(Form form) {
-		String query = "Insert into form (id, username, firstName, lastName, email, reimbursementAmount, date, format, gradeReceived, type, status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+	public void addForm(Form form) {
+		String query = "Insert into form (id, username, firstName, lastName, email, reimbursementAmount, date, format, gradeReceived, type, status, directSupApproval, deptHeadApproval, benCoApproval, time, document, reasonForDenial ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		UUID id = UUID.randomUUID();
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
 				.build();
 		BoundStatement bound = session.prepare(s)
-				.bind(id, form.getUsername(), form.getFirstName(), form.getLastName(), form.getEmail(), form.getReimbursementAmount(), form.getDate(), form.getFormat().toString(), form.getGradeReceived(), form.getType().toString(), form.getStatus().toString());
-		session.execute(bound);
-		return id;
-	}
-	@Override
-	public void addForms(Form form) {
-		String query = "Insert into form (id, username, firstName, lastName, email, reimbursementAmount, date, format, gradeReceived, type, status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?;";
-		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
-				.build();
-		BoundStatement bound = session.prepare(s)
-				.bind(form.getUsername(), form.getFirstName(), form.getLastName(), form.getEmail(), form.getReimbursementAmount(), form.getDate(), form.getFormat().toString(), form.getGradeReceived(), form.getType().toString(), form.getStatus().toString());
+				.bind(id, form.getUsername(), form.getFirstName(), form.getLastName(), form.getEmail(), form.getReimbursementAmount(), form.getDate(), form.getFormat().toString(), form.getGradeReceived(), form.getType().toString(), form.getStatus().toString(), form.getDirectSupApproval(), form.getDeptHeadApproval(), form.getBenCoApproval(), form.getTime(), form.getDocument(), form.getReasonForDenial().toString());
 		session.execute(bound);
 	}
 	
 	@Override
 	public List<Form> getForm() {
 		List<Form> forms = new ArrayList<Form>();
-		String query = "Select id, username, firstName, lastName, email, reimbursementAmount, date, format, gradeReceived, type, status from form";
+		String query = "Select id, username, firstName, lastName, email, reimbursementAmount, date, format, gradeReceived, type, status, directSupApproval, deptHeadApproval, benCoApproval, time, document, reasonForDenial from form";
 		SimpleStatement s = new SimpleStatementBuilder(query).build();
 		
 		ResultSet rs = session.execute(s);
@@ -63,9 +54,15 @@ public class ReimbursementDAOImpl implements ReimbursementDAO{
 			form.setReimbursementAmount(row.getLong("reimbursementAmount"));
 			form.setDate(row.getLocalDate("date"));
 			form.setFormat(GradeFormat.valueOf(row.getString("format")));
-			form.setGradeReceived(row.getDouble("gradeReceived"));
+			form.setGradeReceived(row.getString("gradeReceived"));
 			form.setType(ReimbursementType.valueOf(row.getString("type")));
 			form.setStatus(ApplicationStatus.valueOf(row.getString("status")));
+			form.setDirectSupApproval(row.getBoolean("directSupApproval"));
+			form.setDeptHeadApproval(row.getBoolean("deptHeadApproval"));
+			form.setBenCoApproval(row.getBoolean("benCoApproval"));
+			form.setTime(row.getLocalTime("time"));
+			form.setDocument(row.getString("document"));
+			form.setReasonForDenial(ReasonForDenial.valueOf(row.getString("reasonForDenial")));
 			forms.add(form);
 		});
 
@@ -73,7 +70,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO{
 	}
 	@Override
 	public Form getFormByUsername(String username) {
-		String query = "Select id, username, firstName, lastName, email, reimbursementAmount, date, format, gradeReceived, type, status from form where username=?";
+		String query = "Select id, username, firstName, lastName, email, reimbursementAmount, date, format, gradeReceived, type, status, directSupApproval, deptHeadApproval, benCoApproval, time, document, reasonForDenial from form where username=?";
 		SimpleStatement s = new SimpleStatementBuilder(query).build();
 		BoundStatement bound = session.prepare(s).bind(username);
 		ResultSet rs = session.execute(bound);
@@ -91,16 +88,22 @@ public class ReimbursementDAOImpl implements ReimbursementDAO{
 		f.setReimbursementAmount(row.getLong("reimbursementAmount"));
 		f.setDate(row.getLocalDate("date"));
 		f.setFormat(GradeFormat.valueOf(row.getString("format")));
-		f.setGradeReceived(row.getDouble("gradeReceived"));
+		f.setGradeReceived(row.getString("gradeReceived"));
 		f.setType(ReimbursementType.valueOf(row.getString("type")));
 		f.setStatus(ApplicationStatus.valueOf(row.getString("status")));
+		f.setDirectSupApproval(row.getBoolean("directSupApproval"));
+		f.setDeptHeadApproval(row.getBoolean("deptHeadApproval"));
+		f.setBenCoApproval(row.getBoolean("benCoApproval"));
+		f.setTime(row.getLocalTime("time"));
+		f.setDocument(row.getString("document"));
+		f.setReasonForDenial(ReasonForDenial.valueOf(row.getString("reasonForDenial")));
 
 		return f;
 	}
 
 	@Override
 	public Form getFormById(String username, UUID id) {
-		String query = "Select id, username, firstName, lastName, email, reimbursementAmount, date, format, gradeReceived, type, status from form where username = ? and id = ? Allow Filtering";
+		String query = "Select id, username, firstName, lastName, email, reimbursementAmount, date, format, gradeReceived, type, status, directSupApproval, deptHeadApproval, benCoApproval, time, document, reasonForDenial from form where username = ? and id = ? Allow Filtering";
 		BoundStatement bound = session.prepare(new SimpleStatementBuilder(query).build()).bind(username, id);
 		ResultSet rs = session.execute(bound);
 
@@ -117,19 +120,101 @@ public class ReimbursementDAOImpl implements ReimbursementDAO{
 		f1.setReimbursementAmount(row.getLong("reimbursementAmount"));
 		f1.setDate(row.getLocalDate("date"));
 		f1.setFormat(GradeFormat.valueOf(row.getString("format")));
-		f1.setGradeReceived(row.getDouble("gradeReceived"));
+		f1.setGradeReceived(row.getString("gradeReceived"));
 		f1.setType(ReimbursementType.valueOf(row.getString("type")));
 		f1.setStatus(ApplicationStatus.valueOf(row.getString("status")));
+		f1.setDirectSupApproval(row.getBoolean("directSupApproval"));
+		f1.setDeptHeadApproval(row.getBoolean("deptHeadApproval"));
+		f1.setBenCoApproval(row.getBoolean("benCoApproval"));
+		f1.setTime(row.getLocalTime("time"));
+		f1.setDocument(row.getString("document"));
+		f1.setReasonForDenial(ReasonForDenial.valueOf(row.getString("reasonForDenial")));
 		return f1;
 }
+	
+	
+
+
+
 	@Override
-	public void updateForm(Form form) {
-		String query = "update form set id=?, username=?, firstName=?, lastName=?, email=?, reimbursementAmount=?, date=?, format=?, gradeReceived=?, type=?, status=? where username = ?;";
+	public void updateDocuments(Form form) {
+		String query = "update form set document=? where username = ? ;";
 
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
 				.build();
-		BoundStatement bound = session.prepare(s).bind(form.getId(), form.getUsername(), form.getFirstName(), form.getLastName(), form.getEmail(), form.getReimbursementAmount(), form.getDate(), form.getFormat().toString(), form.getGradeReceived(), form.getType().toString(), form.getStatus().toString());
+		BoundStatement bound = session.prepare(s)
+				.bind(form.getDocument(), form.getUsername());
+				
+		session.execute(bound);
+		
+	}
+	
+
+	@Override
+	public void updateStatus(Form form) {
+		String query = "update form set status=? where username = ? ;";
+
+		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
+				.build();
+		BoundStatement bound = session.prepare(s)
+				.bind(form.getStatus().toString(), form.getUsername());
 				
 		session.execute(bound);
 	}
+	
+	@Override
+	public void updateDirectSupApproval(Form form) {
+		String query = "update form set directSupApproval=? where username = ? ;";
+
+		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
+				.build();
+		BoundStatement bound = session.prepare(s)
+				.bind(form.getDirectSupApproval(), form.getUsername());
+				
+		session.execute(bound);
+	}
+	
+
+	@Override
+	public void updateDeptHeadApproval(Form form) {
+		String query = "update form set deptHeadApproval=? where username = ? ;";
+
+		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
+				.build();
+		BoundStatement bound = session.prepare(s)
+				.bind(form.getDeptHeadApproval(), form.getUsername());
+				
+		session.execute(bound);
+	}
+	
+	@Override
+	public void updateBenCoApproval(Form form) {
+		String query = "update form set benCoApproval=? where username = ? ;";
+
+		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
+				.build();
+		BoundStatement bound = session.prepare(s)
+				.bind(form.getBenCoApproval(), form.getUsername());
+				
+		session.execute(bound);
+	}
+
+	@Override
+	public void reasonForDenial (Form form) {
+		String query = "update form reasonForDenial=? where username = ? ;";
+
+		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
+				.build();
+		BoundStatement bound = session.prepare(s)
+				.bind(form.getReasonForDenial().toString(), form.getUsername());
+				
+		session.execute(bound);
+		
+	}
+
+
+
+
+	
+	
 }

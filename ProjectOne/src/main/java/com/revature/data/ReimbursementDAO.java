@@ -7,11 +7,15 @@ import com.revature.beans.Form;
 
 public interface ReimbursementDAO {
 
-	UUID addForm(Form form);
 	List<Form> getForm();
 	Form getFormByUsername(String username);
-	void addForms(Form form);
-	//Form getFormById(UUID id);
-	void updateForm(Form form);
+	void addForm(Form form);
 	Form getFormById(String username, UUID id);
+	void updateDirectSupApproval(Form form);
+	void updateDeptHeadApproval(Form form);
+	void updateBenCoApproval(Form form);
+	void updateStatus(Form form);
+	void reasonForDenial(Form form);
+	void updateDocuments(Form form);
+
 }

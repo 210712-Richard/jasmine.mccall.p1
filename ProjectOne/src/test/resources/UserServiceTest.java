@@ -22,6 +22,9 @@ import com.revature.data.UserDAO;
 public class UserServiceTest {
 	private static UserService service = null;
 	private static User u;
+	private static UserDao ud = null;
+	
+	
 	
 	
 	@BeforeAll
@@ -37,4 +40,17 @@ public class UserServiceTest {
 		service = new UserService();
 		//u.setLastCheckIn(LocalDate.of(2021, 1, 1));
 		service.ud = Mockito.mock(UserDAO.class);
+		
 	}
+	
+//	@Test
+//	public void testLogin() {
+//		Mockito.when(ud.getUser(u.getUsername()).thenReturn(u);
+//		ArgumentCaptor<String> usernameCaptor = ArgumentCaptor.forClass(String.class);
+//		User loginUser = service.login(user.getUsername());
+//		assertEquals(user, loginUser, "Login works.");
+//
+//		assertEquals(user.getUsername(), usernameCaptor.getValue(),
+//				"Checking if user name is correct ");
+//	
+	

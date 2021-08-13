@@ -12,11 +12,14 @@ public class User  {
 	private String password;
 	private String email;
 	private UserType type;
-	private List<UUID> forms = new ArrayList<UUID>();
+    private List<UUID> forms = new ArrayList<UUID>();
+	private Long funds;
+	private List<String> notifications = new ArrayList<String>();
 	
 	public User() {
 		super();
-		
+		this.funds = 0L;
+		this.notifications.add("No new emails");
 	}
 	public User(String username, String firstName, String lastName, String password, String email) {
 		super();
@@ -25,9 +28,9 @@ public class User  {
 		this.lastName = lastName;
 		this.password = password;
 		this.email = email;
-		
-		
-	}
+		}
+
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -72,14 +75,31 @@ public class User  {
 	public void setDocuments(List<UUID>forms) {
 		this.forms = forms;
 	}
+	
+	public Long getFunds() {
+		return funds;
+	}
+	public void setFunds(Long funds) {
+		this.funds = funds;
+	}
+	
+
+	public List<String> getNotifications() {
+		return notifications;
+	}
+	public void setNotifications(List<String> notifications) {
+		this.notifications = notifications;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((forms == null) ? 0 : forms.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((forms == null) ? 0 : forms.hashCode());
+		result = prime * result + ((funds == null) ? 0 : funds.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((notifications == null) ? 0 : notifications.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
@@ -94,11 +114,6 @@ public class User  {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (forms == null) {
-			if (other.forms != null)
-				return false;
-		} else if (!forms.equals(other.forms))
-			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;
@@ -109,10 +124,25 @@ public class User  {
 				return false;
 		} else if (!firstName.equals(other.firstName))
 			return false;
+		if (forms == null) {
+			if (other.forms != null)
+				return false;
+		} else if (!forms.equals(other.forms))
+			return false;
+		if (funds == null) {
+			if (other.funds != null)
+				return false;
+		} else if (!funds.equals(other.funds))
+			return false;
 		if (lastName == null) {
 			if (other.lastName != null)
 				return false;
 		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (notifications == null) {
+			if (other.notifications != null)
+				return false;
+		} else if (!notifications.equals(other.notifications))
 			return false;
 		if (password == null) {
 			if (other.password != null)
@@ -131,7 +161,8 @@ public class User  {
 	@Override
 	public String toString() {
 		return "User [username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", password="
-				+ password + ", email=" + email + ", type=" + type + ", documents=" + forms + "]";
+				+ password + ", email=" + email + ", type=" + type + ", forms=" + forms + ", funds=" + funds
+				+ ", notifications=" + notifications + "]";
 	}
 }
 	

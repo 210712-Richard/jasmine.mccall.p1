@@ -2,29 +2,31 @@ package com.revature.services;
 
 
 import java.time.LocalDate;
+
 import java.util.UUID;
 
-import com.revature.beans.ApplicationStatus;
+
 import com.revature.beans.Form;
 import com.revature.beans.GradeFormat;
+
 import com.revature.beans.ReimbursementType;
-import com.revature.beans.User;
 import com.revature.data.ReimbursementDAO;
 import com.revature.data.ReimbursementDAOImpl;
 import com.revature.factory.BeanFactory;
 import com.revature.factory.Log;
 
-import software.amazon.awssdk.regions.servicemetadata.RdsServiceMetadata;
+
 
 @Log
 public class ReimbursementServiceImpl implements ReimbursementService {
 	private ReimbursementDAO rd = (ReimbursementDAO) BeanFactory.getFactory().get(ReimbursementDAO.class, ReimbursementDAOImpl.class);
+	Form form = new Form();
 	
 	
 
 
 	@Override
-	public Form createNewForm(String username, String firstName, String lastName, String email, long reimbursementAmount, LocalDate date, double gradeReceived, GradeFormat format, ReimbursementType type) {
+	public Form createNewForm(String username, String firstName, String lastName, String email, Long reimbursementAmount, LocalDate date, String gradeReceived, GradeFormat format, ReimbursementType type) {
 		Form f = new Form();
 		f.setUsername(username);
 		f.setFirstName(firstName);
@@ -55,4 +57,13 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 		return rd.getFormById(username, id);
 		
 	}
+
+
+@Override
+public void updateDocuments(Form form) {
+	rd.updateDocuments(form);
+}
+
+
+	
 }
