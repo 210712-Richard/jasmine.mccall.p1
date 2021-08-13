@@ -20,7 +20,7 @@ import io.javalin.plugin.json.JavalinJackson;
 public class Driver {
 	public static void main(String[] args) {
 		//instantiateDatabase();
-		//javalin();
+		javalin();
 		
 	}
 

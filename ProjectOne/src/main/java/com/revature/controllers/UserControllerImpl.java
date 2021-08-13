@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.revature.beans.ApplicationStatus;
 import com.revature.beans.Form;
+import com.revature.beans.ReasonForDenial;
 import com.revature.beans.User;
 import com.revature.beans.UserType;
 import com.revature.data.ReimbursementDAO;
@@ -123,7 +124,7 @@ public class UserControllerImpl implements UserController {
 		rd.updateDeptHeadApproval(f);
 		
 		
-		ctx.json(us);
+		ctx.json(rd);
 		
 	}
 	
@@ -142,6 +143,8 @@ public class UserControllerImpl implements UserController {
 		rd.updateBenCoApproval(f);
 		f.setStatus(ApplicationStatus.APPROVED);
 		rd.updateStatus(f);
+		
+		ctx.json(rd);
 
 		
 		
@@ -160,6 +163,8 @@ public class UserControllerImpl implements UserController {
 		
 		f.setDirectSupApproval(false);
 		rd.updateDirectSupApproval(f);
+		f.setReasonForDenial(ReasonForDenial.INSUFFICIENT_GRADE);
+		rd.reasonForDenial(f);
 
 		
 		

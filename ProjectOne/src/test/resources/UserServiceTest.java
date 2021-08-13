@@ -43,14 +43,14 @@ public class UserServiceTest {
 		
 	}
 	
-//	@Test
-//	public void testLogin() {
-//		Mockito.when(ud.getUser(u.getUsername()).thenReturn(u);
-//		ArgumentCaptor<String> usernameCaptor = ArgumentCaptor.forClass(String.class);
-//		User loginUser = service.login(user.getUsername());
-//		assertEquals(user, loginUser, "Login works.");
-//
-//		assertEquals(user.getUsername(), usernameCaptor.getValue(),
-//				"Checking if user name is correct ");
-//	
+	@Test
+	public void testLogin() {
+		Mockito.when(ud.getUser(u.getUsername()).thenReturn(u);
+		ArgumentCaptor<String> usernameCaptor = ArgumentCaptor.forClass(String.class);
+		User loginUser = service.login(user.getUsername());
+		assertEquals(user, loginUser, "Login works.");
+
+		assertEquals(user.getUsername(), usernameCaptor.getValue(),
+				"Checking if user name is correct ");
+	
 	
